@@ -72,6 +72,9 @@ with title2:
             
 # else :
 
+st.markdown('''Ce site propose de récupérer des images de Marseille à partir d'une adresse et de localiser les arbres présent sur l'image.''')
+st.markdown('''Pour commencer, choisissez simplement une adresse et laissez nous faire le reste.''')
+
 site = st.radio('Choisissez un site pour la carte', ('bing','google_maps','mapbox'))
 
 locator = Nominatim(user_agent='google')
@@ -105,7 +108,18 @@ response = requests.get(
 )  
 
 if response.status_code == 200:
-        st.image([np.array(response.json()["image"]),np.array(response.json()["image"])])
+        col1, col2, col3 = st.beta_columns([6,1,6])
+        
+        with col1:
+            st.image(np.array(response.json()["original_image"]))
+
+        with col2:
+            st.write("")
+
+        with col3:
+            st.image(np.array(response.json()["image"]))
+        
+        
 else:
     st.markdown("La carte n'a pas pu être appelé ")
 
