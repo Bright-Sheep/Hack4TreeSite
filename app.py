@@ -12,8 +12,6 @@ from geopy.geocoders import Nominatim
 
 import numpy as np
 
-import matplotlib.pyplot as plt
-
 st.set_page_config(
     page_title="Projet Hack4Nature", # => Projet_Hack4Nature - Streamlit
     page_icon="🌳",
