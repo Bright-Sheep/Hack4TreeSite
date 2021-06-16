@@ -27,76 +27,84 @@ with title2:
     st.title("Hack4Nature - Batch #610 Marseille")
 
 
-st.sidebar.markdown('''Pour faire notre prédiction, nous proposons deux méthodes.
-''')
+#st.sidebar.markdown('''Pour faire notre prédiction, nous proposons deux méthodes.
+#''')
 
-direction = st.sidebar.radio('Selectionner une méthode :', ('Telecharger une image','Entrer une adresse'))
+#direction = st.sidebar.radio('Selectionner une méthode :', ('Telecharger une image','Entrer une adresse'))
 
-st.write(direction)
+#st.write(direction)
 
-if direction == 'Telecharger une image':
+# if direction == 'Telecharger une image':
 
-    st.set_option('deprecation.showfileUploaderEncoding', False)
+#     st.set_option('deprecation.showfileUploaderEncoding', False)
 
-    uploaded_file = st.file_uploader("Choose a png file", type="png")
+#     uploaded_file = st.file_uploader("Choose a png file", type="png")
 
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption='map', use_column_width=False)
+#     if uploaded_file is not None:
+#         image = Image.open(uploaded_file)
+#         st.image(image, caption='map', use_column_width=False)
         
-        url = 'http://localhost:8000/predict_image_given'
+#         url = 'http://localhost:8000/predict_image_given'
     
+#     st.markdown(type(uploaded_file))
     
-        
-    params = dict(
-        image = image
-    )
+#     image = Image.open(uploaded_file)
+    
+#     st.markdown(type(image))
+    
+#     img = np.array(image).tolist()
+    
+#     st.markdown(type(img))
+    
+#     params = dict(
+#         image = img
+#     )
             
-    response = requests.get(
-        url,
-        params=params
-    )  
+#     response = requests.post(
+#         url,
+#         params=params
+#     )  
     
-    if response.status_code == 200:
-        st.image(np.array(response.json()["image"]))
-    else:
-        st.markdown("La carte n'a pas pu être appelé ")
+#     if response.status_code == 200:
+#         st.image(np.array(response.json()["image"]))
+#     else:
+#         st.markdown("L'image n'a pas pu être appelé ")
             
-else :
+# else :
 
-    site = st.radio('Choisissez un site pour la carte', ('bing','google_maps','mapbox'))
+site = st.radio('Choisissez un site pour la carte', ('bing','google_maps','mapbox'))
 
-    locator = Nominatim(user_agent='google')
-    
-    user_location = st.text_input('Veuillez entrer une adresse','Marseille')
-    
-    location = locator.geocode(user_location)
-    
-    if  location != None:
-        st.write('Latitude = {}, Longitude = {}'.format(location.latitude, location.longitude))    
+locator = Nominatim(user_agent='google')
 
-        if coordinates_in_city(location.latitude,location.longitude):
-            st.success('Les coordonnées sont dans Marseille.')
-        else :
-            st.error("⚠️ Vous n'êtes pas dans Marseille.")
+user_location = st.text_input('Veuillez entrer une adresse','Marseille')
+
+location = locator.geocode(user_location)
+
+if  location != None:
+    st.write('Latitude = {}, Longitude = {}'.format(location.latitude, location.longitude))    
+
+    if coordinates_in_city(location.latitude,location.longitude):
+        st.success('Les coordonnées sont dans Marseille.')
     else :
-        st.error('''Je n'ai pas compris votre adresse. Veuillez ne pas rouler votre tête contre le clavier''')
+        st.error("⚠️ Vous n'êtes pas dans Marseille.")
+else :
+    st.error('''Je n'ai pas compris votre adresse. Veuillez ne pas rouler votre tête contre le clavier''')
         
         
-    url = 'http://localhost:8000/predict_image'
-            
-    params = dict(
-        latitude = location.latitude ,
-        longitude = location.longitude
-    )
-            
-    response = requests.get(
-        url,
-        params=params
-    )  
-    
-    if response.status_code == 200:
-        st.image(np.array(response.json()["image"]))
-    else:
-        st.markdown("La carte n'a pas pu être appelé ")
+url = 'http://localhost:8000/predict_image'
+        
+params = dict(
+    latitude = location.latitude ,
+    longitude = location.longitude
+)
+        
+response = requests.get(
+    url,
+    params=params
+)  
+
+if response.status_code == 200:
+        st.image([np.array(response.json()["image"]),np.array(response.json()["image"])])
+else:
+    st.markdown("La carte n'a pas pu être appelé ")
 
