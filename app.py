@@ -95,7 +95,8 @@ url = 'http://localhost:8000/predict_image'
         
 params = dict(
     latitude = location.latitude ,
-    longitude = location.longitude
+    longitude = location.longitude,
+    service = site
 )
         
 response = requests.get(
