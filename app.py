@@ -70,14 +70,14 @@ with title2:
             
 # else :
 
-st.markdown('''Ce site propose de récupérer des images de Marseille à partir d'une adresse et de localiser les arbres présent sur l'image.''')
-st.markdown('''Pour commencer, choisissez simplement une adresse et laissez nous faire le reste.''')
+st.markdown('''Ce site propose de récupérer des images de Marseille à partir d'une adresse et de localiser les arbres présents sur l'image.''')
+st.markdown('''Pour commencer, choisissez simplement une adresse et un service pour obtenir la carte, puis laissez nous faire le reste.''')
 
-site = st.radio('Choisissez un site pour la carte', ('bing','google_maps','mapbox'))
+user_location = st.text_input('Veuillez entrer une adresse :','Marseille')
+
+site = st.radio('Choisissez un service pour la carte :', ('bing','google_maps','mapbox'))
 
 locator = Nominatim(user_agent='google')
-
-user_location = st.text_input('Veuillez entrer une adresse','Marseille')
 
 location = locator.geocode(user_location)
 
@@ -89,35 +89,38 @@ if  location != None:
     else :
         st.error("⚠️ Vous n'êtes pas dans Marseille.")
 else :
-    st.error('''Je n'ai pas compris votre adresse. Veuillez ne pas rouler votre tête contre le clavier''')
+    st.error('''Je n'ai pas compris votre adresse.''')
         
         
-url = 'http://localhost:8000/predict_image'
+#url = 'http://localhost:8000/predict_image'
+url = 'https://hacknature-qhptkplhyq-ew.a.run.app/predict_image'
         
 params = dict(
     latitude = location.latitude ,
     longitude = location.longitude,
     service = site
 )
-        
-response = requests.get(
-    url,
-    params=params
-)  
+if st.button("Charger l'image"):
+    # print is visible in server output, not in the page
+    
+    response = requests.get(
+        url,
+        params=params
+    )  
 
-if response.status_code == 200:
-        col1, col2, col3 = st.beta_columns([6,1,6])
-        
-        with col1:
-            st.image(np.array(response.json()["original_image"]))
+    if response.status_code == 200:
+            col1, col2, col3 = st.beta_columns([6,1,6])
+            
+            with col1:
+                st.image(np.array(response.json()["original_image"]),caption = "Image d'origine")
 
-        with col2:
-            st.write("")
+            with col2:
+                st.write("")
 
-        with col3:
-            st.image(np.array(response.json()["image"]))
-        
-        
-else:
-    st.markdown("La carte n'a pas pu être appelé ")
+            with col3:
+                st.image(np.array(response.json()["image"]),caption='Arbres repérés')
+            
+            
+    else:
+        st.markdown("La carte n'a pas pu être appelé ")
 

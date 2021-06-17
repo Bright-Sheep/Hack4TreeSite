@@ -2,10 +2,10 @@ streamlit
 
 requests
 
-PIL
+pillow
 
 geopy
 
 numpy
 
-json
+shapely
