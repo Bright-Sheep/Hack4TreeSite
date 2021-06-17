@@ -94,33 +94,35 @@ else :
         
 #url = 'http://localhost:8000/predict_image'
 url = 'https://hacknature-qhptkplhyq-ew.a.run.app/predict_image'
+
+if  location != None:
+            
+    params = dict(
+        latitude = location.latitude ,
+        longitude = location.longitude,
+        service = site
+    )
+    if st.button("Charger l'image"):
+        # print is visible in server output, not in the page
         
-params = dict(
-    latitude = location.latitude ,
-    longitude = location.longitude,
-    service = site
-)
-if st.button("Charger l'image"):
-    # print is visible in server output, not in the page
-    
-    response = requests.get(
-        url,
-        params=params
-    )  
+        response = requests.get(
+            url,
+            params=params
+        )  
 
-    if response.status_code == 200:
-            col1, col2, col3 = st.beta_columns([6,1,6])
-            
-            with col1:
-                st.image(np.array(response.json()["original_image"]),caption = "Image d'origine")
+        if response.status_code == 200:
+                col1, col2, col3 = st.beta_columns([6,1,6])
+                
+                with col1:
+                    st.image(np.array(response.json()["original_image"]),caption = "Image d'origine")
 
-            with col2:
-                st.write("")
+                with col2:
+                    st.write("")
 
-            with col3:
-                st.image(np.array(response.json()["image"]),caption='Arbres repérés')
-            
-            
-    else:
-        st.markdown("La carte n'a pas pu être appelé ")
+                with col3:
+                    st.image(np.array(response.json()["image"]),caption='Arbres repérés')
+                
+                
+        else:
+            st.markdown("La carte n'a pas pu être appelé ")
 
