@@ -71,11 +71,12 @@ with title2:
 # else :
 
 st.markdown('''Ce site propose de récupérer des images de Marseille à partir d'une adresse et de localiser les arbres présents sur l'image.''')
-st.markdown('''Pour commencer, choisissez simplement une adresse et un service pour obtenir la carte, puis laissez nous faire le reste.''')
+# st.markdown('''Pour commencer, choisissez simplement une adresse et un service pour obtenir la carte, puis laissez nous faire le reste.''')
+st.markdown('''Pour commencer, choisissez simplement une adresse la carte, puis laissez nous faire le reste 🙂''')
 
 user_location = st.text_input('Veuillez entrer une adresse :','Marseille')
 
-site = st.radio('Choisissez un service pour la carte :', ('bing','google_maps','mapbox'))
+# site = st.radio('Choisissez un service pour la carte :', ('bing','google_maps','mapbox'))
 
 locator = Nominatim(user_agent='google')
 
@@ -100,7 +101,7 @@ if  location != None:
     params = dict(
         latitude = location.latitude ,
         longitude = location.longitude,
-        service = site
+        # service = site
     )
     if st.button("Charger l'image"):
         # print is visible in server output, not in the page
